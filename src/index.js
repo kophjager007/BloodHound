@@ -1,21 +1,21 @@
-import "core-js/stable";
-import "regenerator-runtime/runtime"; // generators
+import 'core-js/stable';
+import 'regenerator-runtime/runtime'; // generators
 import React from 'react';
 import ReactDOM from 'react-dom';
 
 import AppContainer from './AppContainer';
 import Login from './components/Float/Login';
-import {positions, Provider as AlertProvider, transitions} from 'react-alert';
+import { positions, Provider as AlertProvider, transitions } from 'react-alert';
 import AlertTemplate from 'react-alert-template-basic';
 
-import {remote, shell} from 'electron';
-import {join} from 'path';
-import {existsSync, mkdirSync, writeFileSync} from 'fs';
+import { remote, shell } from 'electron';
+import { join } from 'path';
+import { existsSync, mkdirSync, writeFileSync } from 'fs';
 
 import ConfigStore from 'electron-store';
 
 import 'react-bootstrap-typeahead/css/Typeahead.css';
-import {EventEmitter2 as e} from 'eventemitter2';
+import { EventEmitter2 as e } from 'eventemitter2';
 
 const { app } = remote;
 
@@ -160,6 +160,12 @@ global.appStore = {
                 scale: 1.25,
                 color: '#34D2EB',
             },
+            AZRole: {
+                font: "'Font Awesome 5 Free'",
+                content: '\uf2d2',
+                scale: 1.25,
+                color: '#ED8537',
+            },
             AZGroup: {
                 font: "'Font Awesome 5 Free'",
                 content: '\uF0C0',
@@ -184,6 +190,12 @@ global.appStore = {
                 scale: 1.25,
                 color: '#FFE066',
             },
+            AZManagementGroup: {
+                font: "'Font Awesome 5 Free'",
+                content: '\uf1b2',
+                scale: 1.25,
+                color: '#BD93D8',
+            },
             AZVM: {
                 font: "'Font Awesome 5 Free'",
                 content: '\uf108',
@@ -195,6 +207,48 @@ global.appStore = {
                 content: '\uf108',
                 scale: 1.25,
                 color: '#B18FCF',
+            },
+            AZContainerRegistry: {
+                font: "'Font Awesome 5 Free'",
+                content: '\uf49e',
+                scale: 1.25,
+                color: '#0885D7',
+            },
+            AZAutomationAccount: {
+                font: "'Font Awesome 5 Free'",
+                content: '\uf085',
+                scale: 1.25,
+                color: '#F4BA44',
+            },
+            AZLogicApp: {
+                font: "'Font Awesome 5 Free'",
+                content: '\uf0e8',
+                scale: 1.25,
+                color: '#9EE047',
+            },
+            AZFunctionApp: {
+                font: "'Font Awesome 5 Free'",
+                content: '\uf0e7',
+                scale: 1.25,
+                color: '#F4BA44',
+            },
+            AZWebApp: {
+                font: "'Font Awesome 5 Free'",
+                content: '\uf247',
+                scale: 1.25,
+                color: '#4696E9',
+            },
+            AZManagedCluster: {
+                font: "'Font Awesome 5 Free'",
+                content: '\uf1b3',
+                scale: 1.25,
+                color: '#326CE5',
+            },
+            AZVMScaleSet: {
+                font: "'Font Awesome 5 Free'",
+                content: '\uf233',
+                scale: 1.25,
+                color: '#007CD0',
             },
             AZKeyVault: {
                 font: "'Font Awesome 5 Free'",
@@ -235,7 +289,7 @@ global.appStore = {
             TrustedBy: 'curvedArrow',
             DCSync: 'tapered',
             Contains: 'tapered',
-            GpLink: 'tapered',
+            GPLink: 'tapered',
             Owns: 'tapered',
             CanRDP: 'tapered',
             ExecuteDCOM: 'tapered',
@@ -251,7 +305,9 @@ global.appStore = {
             CanPSRemote: 'tapered',
             AddSelf: 'tapered',
             WriteSPN: 'tapered',
-            AddKeyCredentialLink: 'tapered'
+            AddKeyCredentialLink: 'tapered',
+            SyncLAPSPassword: 'tapered',
+            DumpSMSAPassword: 'tapered',
         },
     },
     lowResPalette: {
@@ -278,7 +334,7 @@ global.appStore = {
             TrustedBy: 'curvedArrow',
             DCSync: 'line',
             Contains: 'line',
-            GpLink: 'line',
+            GPLink: 'line',
             Owns: 'line',
             CanRDP: 'line',
             ExecuteDCOM: 'line',
@@ -292,6 +348,8 @@ global.appStore = {
             ReadGMSAPassword: 'line',
             HasSIDHistory: 'line',
             CanPSRemote: 'line',
+            SyncLAPSPassword: 'line',
+            DumpSMSAPassword: 'line',
         },
     },
     highResStyle: {
@@ -382,13 +440,26 @@ if (typeof conf.get('edgeincluded') === 'undefined') {
         AllowedToDelegate: true,
         ReadLAPSPassword: true,
         Contains: true,
-        GpLink: true,
+        GPLink: true,
         AddAllowedToAct: true,
         AllowedToAct: true,
+        WriteAccountRestrictions: true,
         SQLAdmin: true,
         ReadGMSAPassword: true,
         HasSIDHistory: true,
         CanPSRemote: true,
+        SyncLAPSPassword: true,
+        DumpSMSAPassword: true,
+        AZMGGrantRole: true,
+        AZMGAddSecret: true,
+        AZMGAddOwner: true,
+        AZMGAddMember: true,
+        AZMGGrantAppRoles: true,
+        AZNodeResourceGroup: true,
+        AZWebsiteContributor: true,
+        AZLogicAppContributo: true,
+        AZAutomationContributor: true,
+        AZAKSContributor: true,
     });
 }
 
@@ -399,7 +470,7 @@ const alertOptions = {
     transitions: transitions.FADE,
     containerStyle: {
         zIndex: 100,
-        width: '25%',
+        width: '100%',
     },
 };
 
